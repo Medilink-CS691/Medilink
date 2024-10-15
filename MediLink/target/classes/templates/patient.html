@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Portal - MediLink</title>
+    <link rel="stylesheet" href="/css/patient.css">
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <header>
+        <div class="logo">
+            <h1>MediLink - Portal</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#patients">Doctor Info</a></li>
+                <li><a href="#prescriptions">Medical Records</a></li>
+                <li><a href="#notifications">Support</a></li>
+                <li><a href="#account">Account</a></li>
+                <li><a href="#" class="cta">Sign Out</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Dashboard Section -->
+    <main class="container">
+        <section class="dashboard-section">
+            <hgroup class="heading-group">
+                <h2>Welcome, Patient</h2>
+                <h3>Dashboard Summary</h3>
+            </hgroup>
+
+            <div class="grid dashboard-grid">
+                <section class="wedge-card" onclick="location.href='#prescriptions'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1204/1204980.png" alt="Prescriptions Icon">
+                    <h4>View Prescriptions</h4>
+                    <p>Check your current and past prescriptions.</p>
+                </section>
+
+                <section class="wedge-card" onclick="location.href='#medical-records'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2913/2913542.png" alt="Medical Records Icon">
+                    <h4>Recent Medical Records</h4>
+                    <p>View your recent test results and medical records.</p>
+                </section>
+
+                <section class="wedge-card" onclick="location.href='#notifications'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2950/2950606.png" alt="Notifications Icon">
+                    <h4>Account Notifications</h4>
+                    <p>No new notifications at the moment.</p>
+                </section>
+
+                <section class="wedge-card" onclick="location.href='#doctor-diagnosis'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3480/3480742.png" alt="Doctor Diagnosis Icon">
+                    <h4>Recent Doctor Diagnosis</h4>
+                    <p>See the latest diagnosis from your doctor.</p>
+                </section>
+            </div>
+        </section>
+
+        <!-- Portal Sections -->
+        <section class="portal-sections">
+            <hgroup class="heading-group">
+                <h3>Portal Sections</h3>
+            </hgroup>
+
+            <div class="grid portal-grid">
+                <section class="wedge-card" id="medical-records" onclick="location.href='#medical-records'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2913/2913542.png" alt="Medical Records Icon">
+                    <h4>Medical Records</h4>
+                    <p>View your complete medical history, including past visits, test results, and prescriptions.</p>
+                </section>
+
+                <section class="wedge-card" id="doctor-info" onclick="location.href='#doctor-info'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2816/2816376.png" alt="Doctor Info Icon">
+                    <h4>Doctor Info</h4>
+                    <p>Search and view information about doctors, including contact details and specialties.</p>
+                </section>
+
+                <section class="wedge-card" id="customer-support" onclick="location.href='#customer-support'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/3078/3078927.png" alt="Support Icon">
+                    <h4>Customer Support</h4>
+                    <p>Have billing queries or other concerns? Contact our support team.</p>
+                </section>
+
+                <section class="wedge-card" id="account" onclick="location.href='#account'">
+                    <img src="https://cdn-icons-png.flaticon.com/512/1033/1033465.png" alt="Account Icon">
+                    <h4>Account</h4>
+                    <p>Modify your account, reset your password, or manage your billing and insurance information.</p>
+                </section>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <!-- Footer Section -->
+<footer class="footer">
+    <p>&copy; 2024 MediLink. All Rights Reserved.</p>
+    <ul>
+        <li><a href="#">Privacy Policy</a></li>
+        <li><a href="#">Terms of Service</a></li>
+        <li><a href="#">Help/FAQ</a></li>
+    </ul>
+</footer>
+
+
+    <script src="/js/patient.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,276 @@
+/* General Styles */
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+    color: #333;
+}
+.hero, .features {
+    min-width: 100vw; /* Full viewport width */
+    height: 100vh; /* Full viewport height */
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.head {
+    display: flex;
+    justify-content: end;
+}
+
+/* Header Section */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 20px 0;
+}
+
+.logo h1 {
+    display: inline-block;
+    margin: 0;
+    padding: 0 20px;
+    font-size: 1.8rem;
+}
+
+nav ul {
+    list-style: none;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1rem;
+}
+
+nav ul li a.cta {
+    background-color: #ff7f50;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+nav ul li a.cta:hover {
+    background-color: #ff6347;
+}
+
+/* Hero Section */
+/* Hero Section with Background Image */
+.hero {
+    background: url('/images/healthcare_background.jpg') no-repeat center center/cover; /* Background image */
+    color: white;
+    text-align: center;
+    flex-grow: 1; /* This makes the hero take up the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Optional: Add a semi-transparent overlay on the background image to improve text readability */
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black overlay */
+    z-index: 1;
+}
+
+/* Ensure content is on top of the overlay */
+.hero h2, .hero p, .hero .cta {
+    z-index: 2;
+}
+
+/* Hero Text Styling */
+.hero h2 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+}
+
+.hero .cta {
+    background-color: #ff7f50;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover effect on CTA button */
+.hero .cta:hover {
+    background-color: #ff6347;
+}
+/* Styling for the scroll button */
+/* Scroll Button Styling */
+.scroll-indicator {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;  /* Ensure the button is above other elements */
+}
+
+.scroll-indicator button {
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    padding: 10px;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.scroll-indicator button:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+
+/* Features Section */
+/* Features Section */
+.features {
+    background: url('/images/key_features_background.jpg') no-repeat center center/cover;
+    color: white;
+    padding: 100px 0;
+    text-align: center;
+    height: 100vh;  /* Full page height */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* Optional: Overlay to ensure text readability */
+.features::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+    z-index: 1;
+}
+
+/* Ensure content is on top of the overlay */
+.features h3, .features .features-grid {
+    z-index: 2;
+}
+
+/* Heading for Features Section */
+.features h3 {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    color: white;
+}
+
+/* Features Grid Layout */
+.features-grid {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    width: 80%;
+}
+
+/* Individual Feature Item Styling */
+.feature-item {
+    background-color: rgba(255, 255, 255, 0.2); /* Slightly transparent background */
+    padding: 20px;
+    border-radius: 10px;
+    width: 45%;
+    margin-bottom: 20px;
+    color: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover effect on Feature Item */
+.feature-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Feature Item Headings */
+.feature-item h4 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: white;
+}
+
+/* Feature Item Descriptions */
+.feature-item p {
+    font-size: 1rem;
+    color: white;
+}
+
+/* Footer Section */
+footer {
+    background-color: #333;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+footer ul {
+    list-style: none;
+    margin: 10px 0;
+    padding: 0;
+}
+
+footer ul li {
+    display: inline-block;
+    margin-right: 15px;
+}
+
+footer ul li a {
+    color: white;
+    text-decoration: none;
+}
+/* Scroll to Top Button Styling */
+.scroll-top-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 10; /* Ensure it is above other elements */
+    display: none; /* Hidden initially */
+}
+
+.scroll-top-btn:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+

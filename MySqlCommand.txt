@@ -1,0 +1,3 @@
+CREATE DATABASE MediLink;
+CREATE USER MediLink_admin@'localhost' IDENTIFIED BY '123456';
+GRANT ALL ON MediLink.* TO MediLink_admin@'localhost';
