@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.MediLink.model.Account;
+import com.example.MediLink.model.PatientAccount;
 import com.example.MediLink.repository.AccountRepository;
 import com.example.MediLink.service.AccountStorageService;
 
@@ -53,7 +53,7 @@ public class AccountController {
     @RequestParam String age,@RequestParam String gender,@RequestParam String email,@RequestParam String phone,@RequestParam String password,@RequestParam String street, 
     @RequestParam String city,@RequestParam String state,@RequestParam String zipCode) {
     
-        Account account=new Account(username,firstName,middleName,lastName,
+        PatientAccount account=new PatientAccount(username,firstName,middleName,lastName,
         age,gender,email,phone,password,street,city,state,zipCode);
         account.setMiddleName(middleName);
         accountStorageService.saveAccount(account);
@@ -67,6 +67,7 @@ public class AccountController {
         boolean isAuthenticated = accountStorageService.authenticate(username, password);
         
         if (isAuthenticated) {
+            model.addAttribute("username", username);
             return "patient"; // Redirect to home page on success
         } else {
             model.addAttribute("errorMessage", "Can't find an account with that username and password.");

@@ -1,0 +1,11 @@
+/var/lib/jenkins/workspace/MediLink_QA/MediLink
+
+sudo mvn clean package -DskipTests
+
+ls
+
+java -jar file-demo-0.0.1-SNAPSHOT.jar --server.port=8081
+
+sudo rm -rf /var/lib/jenkins/workspace/MediLink_QA/MediLink/target
+
+nohup java -jar file-demo-0.0.1-SNAPSHOT.jar --server.port=8081
