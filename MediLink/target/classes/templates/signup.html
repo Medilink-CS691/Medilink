@@ -19,7 +19,7 @@
                 <span class="error-message" id="preferred-name-error"></span>
                 
                 <!-- Display the username text content -->
-                <div id="username-display"></div> <!-- Added to display the username -->
+                <div id="username-display"></div>
 
                 <input type="email" id="email" name="email" placeholder="Email" required>
                 <span class="error-message" id="email-error"></span>
@@ -30,7 +30,6 @@
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <span class="error-message" id="password-error"></span>
         
-                <!-- Separator between form fields and buttons -->
                 <div class="separator"></div>
         
                 <!-- Button Group -->
@@ -62,7 +61,6 @@
                 </select>
                 <span class="error-message" id="gender-error"></span>
         
-                <!-- Separator between form fields and buttons -->
                 <div class="separator"></div>
         
                 <!-- Button Group -->
@@ -92,7 +90,6 @@
                 </label>
                 <span class="error-message" id="terms-error"></span>
         
-                <!-- Separator between form fields and buttons -->
                 <div class="separator"></div>
         
                 <!-- Button Group -->
@@ -109,6 +106,7 @@
         
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
+            // Username validation
             document.getElementById('username').addEventListener('input', function() {
                 const username = this.value;
 
@@ -128,6 +126,52 @@
                         .catch(error => console.error('Error:', error));
                 } else {
                     document.getElementById('preferred-name-error').textContent = ''; // Clear message if input is empty
+                }
+            });
+
+            // Email validation
+            document.getElementById('email').addEventListener('input', function() {
+                const email = this.value;
+
+                if (email.length > 0) {
+                    fetch(`/api/accounts/check-email?email=${email}`)
+                        .then(response => response.json())
+                        .then(isTaken => {
+                            const messageElement = document.getElementById('email-error');
+                            if (isTaken) {
+                                messageElement.textContent = 'Email is already registered';
+                                messageElement.style.color = 'red';
+                            } else {
+                                messageElement.textContent = 'Email is available';
+                                messageElement.style.color = 'green';
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    document.getElementById('email-error').textContent = ''; // Clear message if input is empty
+                }
+            });
+
+            // Phone number validation
+            document.getElementById('phone-number').addEventListener('input', function() {
+                const phone = this.value;
+
+                if (phone.length > 0) {
+                    fetch(`/api/accounts/check-phone?phone=${phone}`)
+                        .then(response => response.json())
+                        .then(isTaken => {
+                            const messageElement = document.getElementById('phone-number-error');
+                            if (isTaken) {
+                                messageElement.textContent = 'Phone number is already registered';
+                                messageElement.style.color = 'red';
+                            } else {
+                                messageElement.textContent = 'Phone number is available';
+                                messageElement.style.color = 'green';
+                            }
+                        })
+                        .catch(error => console.error('Error:', error));
+                } else {
+                    document.getElementById('phone-number-error').textContent = ''; // Clear message if input is empty
                 }
             });
         </script>
