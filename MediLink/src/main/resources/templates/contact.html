@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - MediLink</title>
+    <link rel="stylesheet" href="/css/contact.css">
+</head>
+<body>
+
+    <!-- Main Section -->
+    <main class="container contact-form-container">
+        <hgroup class="heading-group">
+            <h2>Get in Touch with MediLink</h2>
+            <h3>We are here to help with any questions or concerns</h3>
+        </hgroup>
+
+        <!-- Contact Form -->
+        <form class="contact-form">
+            <label for="name">Name</label>
+            <input type="text" id="name" name="name" placeholder="Your Name" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" name="email" placeholder="Your Email" required>
+
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" name="subject" placeholder="Subject" required>
+
+            <label for="message">Message</label>
+            <textarea id="message" name="message" placeholder="Your Message" rows="5" required></textarea>
+
+            <button type="submit" class="submit-btn" onclick="event.preventDefault()">Submit</button>
+            <!-- New Return to Home Button -->
+            <button type="button" class="return-home-btn" onclick="window.location.href='index.html'">Return to Home</button>
+        </form>
+
+        <!-- Contact Details -->
+        <section class="contact-details">
+            <h3>Contact Details</h3>
+            <p><strong>Address:</strong> 123 MediLink St., Medical City</p>
+            <p><strong>Phone:</strong> +123 456 7890</p>
+            <p><strong>Email:</strong> support@medilink.com</p>
+        </section>
+    </main>
+
+
+</body>
+</html>

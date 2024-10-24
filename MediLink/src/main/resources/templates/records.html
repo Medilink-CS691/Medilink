@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and View Medical Records</title>
+    <link rel="stylesheet" href="/css/records.css">
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <span>Welcome, <span th:text="${username}"></span>!</span>
+        </div>
+        <div class="nav-center">
+            <form method="POST" enctype="multipart/form-data" action="/upload" class="upload-form">
+                <input type="hidden" name="username" th:value="${username}"/> <!-- Hidden field for username -->
+                <label for="file">Upload PDF</label>
+                <input type="file" id="file" name="file" accept="application/pdf" required>
+                <button type="submit">Upload</button>
+            </form>
+        </div>
+        <div class="nav-right">
+            <label for="pdfDropdown">Select Medical Record</label>
+            <select id="pdfDropdown" onchange="viewPdf(this.value)">
+                <option value="">-- Select a file --</option>
+                <th:block th:each="file : ${files}">
+                    <option th:value="@{/files/{id}(id=${file.id})}" th:text="${file.fileName}"></option>
+                </th:block>
+            </select>
+        </div>
+    </nav>
+
+    <!-- PDF Viewer Section -->
+    <div class="pdf-viewer">
+        <iframe id="pdfViewer" width="100%" height="90vh" style="border: none;"></iframe>
+        <p>Your browser does not support PDFs. <a href="" id="pdfLink">Download the PDF</a>.</p>
+    </div>
+
+    <script>
+        function viewPdf(pdfUrl) {
+            if (pdfUrl) {
+                document.getElementById('pdfViewer').data = pdfUrl; // Load the PDF in the object
+                document.getElementById('downloadBtn').style.display = 'inline'; // Show the download button
+                document.getElementById('downloadBtn').setAttribute('data-url', pdfUrl.replace('/files/', '/download/')); // Change for download
+                document.getElementById('pdfLink').href = pdfUrl; // Update download link
+            } else {
+                document.getElementById('pdfViewer').data = ''; // Clear the object
+                document.getElementById('downloadBtn').style.display = 'none'; // Hide the download button
+            }
+        }
+
+        function viewPdf(pdfUrl) {
+            if (pdfUrl) {
+                document.getElementById('pdfViewer').src = pdfUrl; // Load the PDF in the iframe
+                document.getElementById('downloadBtn').style.display = 'inline'; // Show the download button
+                document.getElementById('downloadBtn').setAttribute('data-url', pdfUrl.replace('/files/', '/download/')); // Change for download
+                document.getElementById('pdfLink').href = pdfUrl; // Update download link
+            } else {
+                document.getElementById('pdfViewer').src = ''; // Clear the iframe
+                document.getElementById('downloadBtn').style.display = 'none'; // Hide the download button
+            }
+        }
+    </script>
+
+</body>
+</html>

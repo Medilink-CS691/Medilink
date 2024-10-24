@@ -1,0 +1,212 @@
+/* General Form Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('/images/login_background.jpg') no-repeat center center/cover;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    position: relative;
+}
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Darken the background */
+    z-index: 1; /* Ensure this is behind the form content */
+}
+.signup-container {
+    background-color: rgba(255, 255, 255, 0.8);  /* Slight transparency */
+    border-radius: 10px;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    z-index: 2; /* Ensure the login form is on top of the overlay */
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+/* Form Step Styling */
+.form-step {
+    display: none;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.form-step.active {
+    display: block;
+    opacity: 1;
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+select {
+    width: -webkit-fill-available;
+    padding: 12px 15px;
+    margin: 10px 0;  /* Adjusted margin for better spacing */
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+input:focus,
+select:focus {
+    outline: none;
+    border-color: #2575fc;
+    box-shadow: 0px 0px 8px rgba(37, 117, 252, 0.3);
+}
+
+/* Error Message Styling */
+.error-message {
+    color: red;
+    font-size: 0.85rem; /* Smaller font size */
+    margin-top: 5px; /* Slight margin for better alignment */
+    display: block;
+    text-align: left;
+}
+
+/* Separator between form fields and buttons */
+.separator {
+    margin: 20px 0;  /* Adds a space between form fields and buttons */
+    border-bottom: 1px solid black;
+}
+
+/* Button Group for Back/Next buttons */
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px; /* Space above the button group */
+}
+
+/* Buttons */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+
+/* Next and Submit Buttons */
+button.next-btn, button.submit-btn {
+    background-color: #2575fc;
+}
+
+button.submit-btn:disabled {
+    background-color: #b3b3b3;
+}
+
+/* Back Button */
+button.prev-btn {
+    background-color: #6c757d;
+}
+
+/* Return to Login Button */
+.return-home {
+    background-color: #ffc107;
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    border: none;
+    margin-top: 16px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.return-home:hover {
+    background-color: #e0a800;
+}
+
+/* Step Indicators */
+.step-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.step-indicator div {
+    background-color: #ddd;
+    height: 8px;
+    width: 100px;
+    border-radius: 4px;
+    transition: background-color 0.3s ease;
+}
+
+.step-indicator .active-step {
+    background-color: #2575fc;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .signup-container {
+        padding: 30px;
+        width: 100%;
+    }
+
+    input, select {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox 
+input[type=number] {
+  -moz-appearance: textfield;
+}
+*/
+
+/* File Upload Styling */
+.file-upload {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.file-upload label {
+    font-size: 0.95rem;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+.file-upload input[type="file"] {
+    padding: 8px;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.file-upload input[type="file"]:focus {
+    outline: none;
+    border-color: #2575fc;
+    box-shadow: 0px 0px 8px rgba(37, 117, 252, 0.3);
+}
+
+
