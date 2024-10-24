@@ -1,6 +1,0 @@
-To use it locally, you need to enter the Mysql commands in the mysql command line, See MySqlCommand document for details.
-
-If you need to package this program, use this command: "mvn clean package"
-
-For this jar package, you can use "java -jar" command to run it.
-
