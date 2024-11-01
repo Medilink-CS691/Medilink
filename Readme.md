@@ -12,7 +12,7 @@ This is the Capstone Project (CS691), Guided by Prof. Chernak, Yuri
 2) Poduct Owner : Anirudh Padma
 3) Business Analyst : Dhanunjaya Sannapaneni
 4) Lead Developer : Rajbasheer Baig Mogal
-5) Developer : Yinning Chen
+5) Developer : Yining Chen
 6) Database Developer : Sarjakkumar Kothiya
 7) QA Analyst : Murali Marupudi
 8) Software Tester : Dinesh Gangavaram
