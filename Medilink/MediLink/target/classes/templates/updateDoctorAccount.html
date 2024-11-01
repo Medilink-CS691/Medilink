@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Account - MediLink</title>
+    <link rel="stylesheet" href="/css/updateaccount.css">
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/images/login_background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            overflow-y: auto;
+            height: 100vh;
+        }
+        /* Container styles */
+        .modify-account-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+        h1, h2 { text-align: center; margin: 0; }
+        input[type="text"], input[type="email"], input[type="tel"], input[type="password"], select {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        .button-group { display: flex; justify-content: space-between; }
+        .save-btn, .cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .save-btn { background-color: #2575fc; color: white; }
+        .cancel-btn { background-color: #e0e0e0; color: black; }
+        .save-btn:hover { background-color: #1f66d1; }
+        .cancel-btn:hover { background-color: #d5d5d5; }
+        .error-message { color: red; font-size: 0.85rem; display: block; }
+        .success-message { color: green; font-size: 0.85rem; display: block; }
+        .separator { width: 100%; height: 1px; background-color: #ddd; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="modify-account-container">
+        <h1>Modify Account Information</h1>
+
+        <form th:action="@{/doctor/account/update}" th:object="${doctorAccount}" method="post" onsubmit="showSuccessMessage()">
+            <h2 th:text="${doctorAccount.fullName} + ' Information'"></h2>
+
+            <!-- Hidden fields for the original values from the backend -->
+            <input type="hidden" name="originalLicense" id="original-license" th:value="${doctorAccount.license}">
+            <input type="hidden" id="original-email" th:value="${doctorAccount.email}">
+            <input type="hidden" id="original-phone" th:value="${doctorAccount.phone}">
+
+            <div id="license-container" style="display: none;">
+                <label for="license">License</label>
+                <input type="text" id="license" th:field="*{license}" required>
+                <span id="license-message" class="error-message"></span>
+            </div>
+
+            <label for="fullName">Full Name</label>
+            <input type="text" id="full-name" th:field="*{fullName}" required>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" onblur="validateEmail()" required>
+            <span id="email-message" class="error-message"></span>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone-number" th:field="*{phone}" onblur="validatePhone()" required>
+            <span id="phone-message" class="error-message"></span>
+
+            <label for="password">New Password (only if changing password)</label>
+            <input type="password" id="password" th:field="*{password}" onblur="validatePassword()">
+            <span id="password-message" class="error-message"></span>
+
+            <label>
+                <input type="checkbox" id="show-password" onclick="togglePasswordVisibility()"> Show Password
+            </label>
+
+            <label for="specialization">Specialization</label>
+            <input type="text" id="specialization" th:field="*{specialization}" required>
+
+            <div class="button-group">
+                <button type="submit" class="save-btn">Save</button>
+                <button type="button" class="cancel-btn" onclick="cancelChanges()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showSuccessMessage() {
+            alert("Update information successful!");
+        }
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        function validateLicense() {
+            const license = document.getElementById("license").value;
+            const originalLicense = document.getElementById("original-license").value;
+            const messageElement = document.getElementById("license-message");
+
+            if (license !== originalLicense) {
+                fetch(`/api/DoctorAccounts/check-license?license=${license}`)
+                    .then(response => response.json())
+                    .then(isTaken => {
+                        messageElement.className = isTaken ? "error-message" : "success-message";
+                        messageElement.textContent = isTaken ? "License is already taken." : "License is available.";
+                    });
+            } else {
+                messageElement.textContent = ""; // Clear message if license is unchanged
+            }
+        }
+
+        function validateEmail() {
+            const email = document.getElementById("email").value;
+            const originalEmail = document.getElementById("original-email").value;
+            const messageElement = document.getElementById("email-message");
+
+            if (email !== originalEmail) {
+                fetch(`/api/DoctorAccounts/check-email?email=${email}`)
+                    .then(response => response.json())
+                    .then(isTaken => {
+                        messageElement.className = isTaken ? "error-message" : "success-message";
+                        messageElement.textContent = isTaken ? "Email is already in use." : "Email is available.";
+                    });
+            } else {
+                messageElement.textContent = ""; // Clear message if email is unchanged
+            }
+        }
+
+        function validatePhone() {
+            const phone = document.getElementById("phone-number").value;
+            const originalPhone = document.getElementById("original-phone").value;
+            const messageElement = document.getElementById("phone-message");
+
+            if (phone !== originalPhone) {
+                fetch(`/api/DoctorAccounts/check-phone?phone=${phone}`)
+                    .then(response => response.json())
+                    .then(isTaken => {
+                        messageElement.className = isTaken ? "error-message" : "success-message";
+                        messageElement.textContent = isTaken ? "Phone number is already in use." : "Phone number is available.";
+                    });
+            } else {
+                messageElement.textContent = ""; // Clear message if phone number is unchanged
+            }
+        }
+
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const messageElement = document.getElementById("password-message");
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+
+            if (password && !passwordRegex.test(password)) {
+                messageElement.className = "error-message";
+                messageElement.textContent = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+            } else {
+                messageElement.textContent = ""; // Clear message if password is valid
+            }
+        }
+
+        function cancelChanges() {
+            const originalLicense = document.getElementById("original-license").value;
+            window.location.href = `/returnDoctor.html?license=${originalLicense}`;
+        }
+    </script>
+</body>
+</html>

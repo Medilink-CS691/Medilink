@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload and View Medical Records</title>
+    <link rel="stylesheet" href="/css/records.css">
+    <style>
+        /* General Button Styling */
+        .button {
+            background-color: #4CAF50; /* Default to upload button color */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        /* Specific Button Colors */
+        .button.return-button {
+            background-color: orange;
+        }
+        .button.download-button {
+            background-color: blue;
+        }
+        .button.delete-button {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-left">
+            <span>Welcome, <span id="usernameSpan" th:text="${username}"></span>!</span>
+            <button class="button return-button" onclick="returnHome()">Return</button> <!-- Return Button -->
+        </div>
+        <div class="nav-center">
+            <form method="POST" enctype="multipart/form-data" action="/upload" class="upload-form">
+                <input type="hidden" name="username" th:value="${username}"/> <!-- Hidden field for username -->
+                <label for="file">Upload PDF</label>
+                <input type="file" id="file" name="file" accept="application/pdf" required>
+                <button type="submit" class="button">Upload</button> <!-- Upload Button -->
+            </form>
+        </div>
+        <div class="nav-right">
+            <label for="pdfDropdown">Select Medical Record</label>
+            <select id="pdfDropdown" onchange="viewPdf(this.value)">
+                <option value="">-- Select a file --</option>
+                <th:block th:each="file : ${files}">
+                    <option th:value="@{/files/{id}(id=${file.id})}" th:text="${file.fileName}"
+                        th:data-download-url="@{/download/{id}(id=${file.id})}"
+                        th:data-delete-url="@{/delete/{id}(id=${file.id})}">
+                    </option>
+                </th:block>
+            </select>
+            <button id="downloadBtn" class="button download-button" style="display: none;" onclick="downloadPdf()">Download</button> <!-- Download Button -->
+            <button id="deleteBtn" class="button delete-button" style="display: none;" onclick="deletePdf()">Delete</button> <!-- Delete Button -->
+        </div>
+    </nav>
+
+    <!-- PDF Viewer Section -->
+    <div class="pdf-viewer">
+        <iframe id="pdfViewer" width="100%" height="90vh" style="border: none;"></iframe>
+    </div>
+
+    <script>
+        function returnHome() {
+            const username = document.getElementById('usernameSpan').textContent; // Get the username directly
+            const returnUrl = "/returnPatient.html?username=" + encodeURIComponent(username); // Construct URL with username
+            window.location.href = returnUrl; // Redirect to return URL with username
+        }
+
+        function viewPdf(pdfUrl) {
+            const dropdown = document.getElementById('pdfDropdown');
+            const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+            if (pdfUrl) {
+                document.getElementById('pdfViewer').src = pdfUrl; // Load the PDF in the iframe
+                document.getElementById('downloadBtn').style.display = 'inline'; // Show the download button
+                const downloadUrl = selectedOption.getAttribute('data-download-url');
+                document.getElementById('downloadBtn').setAttribute('data-url', downloadUrl); // Store the download URL
+                document.getElementById('deleteBtn').style.display = 'inline'; // Show the delete button
+                const deleteUrl = selectedOption.getAttribute('data-delete-url');
+                document.getElementById('deleteBtn').setAttribute('data-url', deleteUrl); // Store the delete URL
+            } else {
+                document.getElementById('pdfViewer').src = ''; // Clear the iframe
+                document.getElementById('downloadBtn').style.display = 'none'; // Hide the download button
+                document.getElementById('deleteBtn').style.display = 'none'; // Hide the delete button
+            }
+        }
+
+        function downloadPdf() {
+            const pdfUrl = document.getElementById('downloadBtn').getAttribute('data-url'); // Get the URL from the button
+            const username = document.getElementById('usernameSpan').textContent; // Get the username directly
+            
+            if (pdfUrl) {
+                // Redirect to the PDF URL with username as a query parameter
+                const downloadWithUsernameUrl = pdfUrl + "?username=" + encodeURIComponent(username);
+                window.location.href = downloadWithUsernameUrl; // Trigger download
+            }
+        }
+
+        function deletePdf() {
+            const deleteUrl = document.getElementById('deleteBtn').getAttribute('data-url'); // Get the URL for deletion
+            const username = document.getElementById('usernameSpan').textContent; // Get the username directly
+
+            if (deleteUrl && confirm("Are you sure you want to delete this PDF?")) {
+                // Redirect to the delete URL with username as query parameter
+                const deleteWithUsernameUrl = deleteUrl + "?username=" + encodeURIComponent(username);
+                window.location.href = deleteWithUsernameUrl;  // Use standard navigation
+            }
+        }
+    </script>
+
+</body>
+</html>

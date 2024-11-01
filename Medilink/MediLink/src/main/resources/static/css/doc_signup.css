@@ -1,0 +1,136 @@
+/* General Form Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: url('/images/login_background.jpg') no-repeat center center/cover;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;  /* Align items to the top */
+    min-height: 100vh;  /* Ensure full viewport height */
+    margin: 0;
+    position: relative;
+    overflow-y: auto; /* Enable vertical scrolling */
+}
+
+body::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Darken the background */
+    z-index: 1;
+}
+
+.signup-container {
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 10px;
+    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+    padding: 40px;
+    width: 400px;
+    text-align: center;
+    z-index: 2;
+    position: relative;
+    transition: all 0.3s ease;
+    max-height: 90vh;  /* Max height for container */
+    overflow-y: auto;  /* Allow scrolling within the container */
+}
+
+/* Separator Line */
+.separator {
+    margin: 20px 0;  /* Space between form fields and buttons */
+    border-bottom: 1px solid black; /* Black border for the line */
+}
+
+/* Input Fields */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"] {
+    width: -webkit-fill-available;
+    padding: 12px 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    outline: none;
+    border-color: #2575fc;
+    box-shadow: 0px 0px 8px rgba(37, 117, 252, 0.3);
+}
+
+/* Error Message Styling */
+.error-message {
+    color: red;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: block;
+    text-align: left;
+}
+
+/* Buttons */
+button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    color: #fff;
+}
+
+/* Submit Button */
+button.submit-btn {
+    background-color: #2575fc;
+}
+
+/* Return to Login Button */
+.return-home {
+    background-color: #ffc107;
+    color: #333;
+    padding: 12px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    border: none;
+    margin-top: 16px;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.return-home:hover {
+    background-color: #e0a800;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .signup-container {
+        padding: 30px;
+        width: 100%;
+    }
+
+    input {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+}
+
+/* Fade-in Effects */
+.fade-in {
+    opacity: 0;  /* Initially hidden */
+    transition: opacity 0.5s ease-in-out;
+}
+
+.fade-in.visible {
+    opacity: 1;  /* Fully visible when class added */
+}
