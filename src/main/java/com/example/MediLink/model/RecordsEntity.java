@@ -11,21 +11,21 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "files")
-public class FileEntity {
+@Table(name = "records")
+public class RecordsEntity {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Column(name = "file_name")
+    @Column(name = "records_name")
     private String fileName;
     
-    @Column(name = "file_type")
+    @Column(name = "records_type")
     private String fileType;
     
     @Lob
-    @Column(name = "file_data", columnDefinition = "LONGBLOB")
+    @Column(name = "records_data", columnDefinition = "LONGBLOB")
     private byte[] fileData;
 
     @Column(name = "uploaded_at")
@@ -33,6 +33,9 @@ public class FileEntity {
 
     @Column(name = "username") // New field for username
     private String username;
+
+    @Column(name = "doctor_license") // New field for username
+    private String doctorLicense;
 
     // Getters and Setters
     public Long getId() {
@@ -81,5 +84,13 @@ public class FileEntity {
 
     public void setUsername(String username) {
         this.username = username; // Setter for username
+    }
+
+    public String getDoctorLicense() {
+        return doctorLicense; // Getter for username
+    }
+
+    public void setDoctorLicense(String doctorLicense) {
+        this.doctorLicense = doctorLicense; // Setter for username
     }
 }

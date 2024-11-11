@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify Account - MediLink</title>
+    <link rel="stylesheet" href="/css/updateaccount.css">
+    <style>
+        /* General styles */
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url('/images/login_background.jpg') no-repeat center center fixed;
+            background-size: cover;
+            overflow-y: auto;
+            height: 100vh;
+        }
+
+        /* Container styles */
+        .modify-account-container {
+            max-width: 700px;
+            margin: 30px auto;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            max-height: calc(100vh - 60px);
+        }
+
+        h1, h2 { text-align: center; margin: 0; }
+
+        input[type="text"], input[type="email"], input[type="tel"], input[type="password"], input[type="number"], select {
+            width: 100%;
+            padding: 12px 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            font-size: 1rem;
+            box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .button-group { display: flex; justify-content: space-between; }
+
+        .save-btn, .cancel-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .save-btn { background-color: #2575fc; color: white; }
+        .cancel-btn { background-color: #e0e0e0; color: black; }
+        .save-btn:hover { background-color: #1f66d1; }
+        .cancel-btn:hover { background-color: #d5d5d5; }
+
+        .error-message { color: red; font-size: 0.85rem; display: block; }
+        .success-message { color: green; font-size: 0.85rem; display: block; }
+        .separator { width: 100%; height: 1px; background-color: #ddd; margin: 20px 0; }
+    </style>
+</head>
+<body>
+
+    <div class="modify-account-container">
+        <h1>Modify Account Information</h1>
+
+        <form th:action="@{/patient/account/update}" th:object="${patientAccount}" method="post">
+            <h2 th:text="${patientAccount.username} + ' Information'"></h2>
+
+            <!-- Hidden fields for the original values from the backend -->
+            <input type="hidden" name="originalUsername" id="original-username" th:value="${patientAccount.username}">
+            <input type="hidden" id="original-email" th:value="${patientAccount.email}">
+            <input type="hidden" id="original-phone" th:value="${patientAccount.phone}">
+
+            <label for="username" style="display: none;">Username</label>
+            <input type="text" id="username" th:field="*{username}" onblur="validateUsername()" required style="display: none;">
+            <span id="username-message" class="error-message" style="display: none;"></span>
+
+            <label for="firstName">First Name</label>
+            <input type="text" id="first-name" th:field="*{firstName}" required>
+
+            <label for="middleName">Middle Name</label>
+            <input type="text" id="middle-name" th:field="*{middleName}">
+
+            <label for="lastName">Last Name</label>
+            <input type="text" id="last-name" th:field="*{lastName}" required>
+
+            <label for="age">Age</label>
+            <input type="number" id="age" th:field="*{age}" required>
+
+            <label for="gender">Gender</label>
+            <select id="gender" th:field="*{gender}" required>
+                <option value="" disabled>Select Gender</option>
+                <option value="male" th:selected="${patientAccount.gender == 'male'}">Male</option>
+                <option value="female" th:selected="${patientAccount.gender == 'female'}">Female</option>
+                <option value="other" th:selected="${patientAccount.gender == 'other'}">Other</option>
+            </select>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" th:field="*{email}" onblur="validateEmail()" required>
+            <span id="email-message" class="error-message"></span>
+
+            <label for="phone">Phone Number</label>
+            <input type="tel" id="phone-number" th:field="*{phone}" onblur="validatePhone()" required>
+            <span id="phone-message" class="error-message"></span>
+
+            <label for="password">New Password (only if changing password)</label>
+            <input type="password" id="password" th:field="*{password}" onblur="validatePassword()">
+            <span id="password-message" class="error-message"></span>
+
+            <label>
+                <input type="checkbox" id="show-password" onclick="togglePasswordVisibility()"> Show Password
+            </label>
+
+            <div class="separator"></div>
+
+            <h2>Address Information</h2>
+            <label for="streetAddress">Street Address</label>
+            <input type="text" id="streetAddress" th:field="*{street}" required>
+
+            <label for="city">City</label>
+            <input type="text" id="city" th:field="*{city}" required>
+
+            <label for="state">State</label>
+            <input type="text" id="state" th:field="*{state}" required>
+
+            <label for="zipcode">Zipcode</label>
+            <input type="text" id="zipcode" th:field="*{zipCode}" required>
+
+            <div class="button-group">
+                <button type="submit" class="save-btn">Save</button>
+                <button type="button" class="cancel-btn" onclick="cancelChanges()">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        function showSuccessMessage() {
+            alert("Update information successful!");
+        }
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('password');
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        function validateUsername() {
+            const username = document.getElementById("username").value;
+            const originalUsername = document.getElementById("original-username").value;
+            const messageElement = document.getElementById("username-message");
+
+            if (username !== originalUsername) {
+                fetch(`/api/Patientaccounts/check-username?username=${username}`)
+                    .then(response => response.json())
+                    .then(isTaken => {
+                        messageElement.className = isTaken ? "error-message" : "success-message";
+                        messageElement.textContent = isTaken ? "Username is already taken." : "Username is available.";
+                    });
+            } else {
+                messageElement.textContent = ""; // Clear message if username is unchanged
+            }
+        }
+
+        function validateEmail() {
+            const email = document.getElementById("email").value;
+            const originalEmail = document.getElementById("original-email").value;
+            const messageElement = document.getElementById("email-message");
+
+            if (email !== originalEmail) {
+                fetch(`/api/Patientaccounts/check-email?email=${email}`)
+                    .then(response => response.json())
+                    .then(isTaken => {
+                        messageElement.className = isTaken ? "error-message" : "success-message";
+                        messageElement.textContent = isTaken ? "Email is already in use." : "Email is available.";
+                    });
+            } else {
+                messageElement.textContent = ""; // Clear message if email is unchanged
+            }
+        }
+
+        function validatePhone() {
+            const phone = document.getElementById("phone-number").value;
+            const originalPhone = document.getElementById("original-phone").value;
+            const messageElement = document.getElementById("phone-message");
+
+            if (phone !== originalPhone) {
+                fetch(`/api/Patientaccounts/check-phone?phone=${phone}`)
+                    .then(response => response.json())
+                    .then(isTaken => {
+                        messageElement.className = isTaken ? "error-message" : "success-message";
+                        messageElement.textContent = isTaken ? "Phone number is already in use." : "Phone number is available.";
+                    });
+            } else {
+                messageElement.textContent = ""; // Clear message if phone number is unchanged
+            }
+        }
+
+        function validatePassword() {
+            const password = document.getElementById("password").value;
+            const messageElement = document.getElementById("password-message");
+            const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/; // Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character
+
+            if (password && !passwordRegex.test(password)) {
+                messageElement.className = "error-message";
+                messageElement.textContent = "Password must be at least 8 characters long, contain at least one uppercase letter, one lowercase letter, one number, and one special character.";
+            } else {
+                messageElement.textContent = ""; // Clear message if password is valid
+            }
+        }
+
+        function cancelChanges() {
+            const originalUsername = document.getElementById("original-username").value;
+            // Redirect to returnPatient.html with the original username as a query parameter
+            window.location.href = `/returnPatient.html?username=${encodeURIComponent(originalUsername)}`;
+        }
+    </script>
+
+    <script src="/js/updateaccount.js"></script>
+</body>
+</html>

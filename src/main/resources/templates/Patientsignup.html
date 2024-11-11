@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create New Account</title>
+    <title>Create Patient Account</title>
     <link rel="stylesheet" href="/css/signup.css">
 </head>
 <body>
 
     <div class="signup-container">
-        <h2>Create New Account</h2>
+        <h2>Create Patient Account</h2>
 
-        <form id="signup-form" action="/Account/Sign_up" method="post">
+        <form id="signup-form" action="/PatientAccount/Sign_up" method="post">
             <!-- Step 1: Basic Information -->
             <div class="form-step active" id="step-1">
                 <h3>Step 1: Basic Information</h3>
@@ -27,6 +27,7 @@
                 <input type="text" id="phone-number" name="phone" placeholder="Phone Number" required>
                 <span class="error-message" id="phone-number-error"></span>
         
+                <!-- Password Field -->
                 <input type="password" id="password" name="password" placeholder="Password" required>
                 <span class="error-message" id="password-error"></span>
         
@@ -105,7 +106,7 @@
                 const username = this.value;
 
                 if (username.length > 0) {
-                    fetch(`/api/accounts/check-username?username=${username}`)
+                    fetch(`/api/Patientaccounts/check-username?username=${username}`)
                         .then(response => response.json())
                         .then(isTaken => {
                             const messageElement = document.getElementById('preferred-name-error');
@@ -128,7 +129,7 @@
                 const email = this.value;
 
                 if (email.length > 0) {
-                    fetch(`/api/accounts/check-email?email=${email}`)
+                    fetch(`/api/Patientaccounts/check-email?email=${email}`)
                         .then(response => response.json())
                         .then(isTaken => {
                             const messageElement = document.getElementById('email-error');
@@ -148,10 +149,12 @@
 
             // Phone number validation
             document.getElementById('phone-number').addEventListener('input', function() {
-                const phone = this.value;
+                const phoneInput = this;
+                const phoneValue = phoneInput.value.replace(/\D/g, ''); // Strip non-numeric characters
 
-                if (phone.length > 0) {
-                    fetch(`/api/accounts/check-phone?phone=${phone}`)
+                // Perform validation check
+                if (phoneValue.length > 0) {
+                    fetch(`/api/Patientaccounts/check-phone?phone=${phoneValue}`)
                         .then(response => response.json())
                         .then(isTaken => {
                             const messageElement = document.getElementById('phone-number-error');
@@ -167,6 +170,13 @@
                 } else {
                     document.getElementById('phone-number-error').textContent = ''; // Clear message if input is empty
                 }
+            });
+
+            // Before the form submission, ensure only the numeric phone value is sent to the backend
+            document.getElementById('signup-form').addEventListener('submit', function() {
+                const phoneInput = document.getElementById('phone-number');
+                const phoneValue = phoneInput.value.replace(/\D/g, ''); // Get only the numeric part
+                phoneInput.value = phoneValue; // Update the input value to only numbers
             });
         </script>
 

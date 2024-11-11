@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.example.MediLink.model.PatientAccount;
 
-public interface AccountRepository extends JpaRepository<PatientAccount, Long> {
+public interface PatientAccountRepository extends JpaRepository<PatientAccount, Long> {
        Optional<PatientAccount> findByUsername(String username); // This method should be present
         // Find account by email
         Optional<PatientAccount> findByEmail(String email);

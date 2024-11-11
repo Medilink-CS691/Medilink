@@ -7,13 +7,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.example.MediLink.model.PatientAccount;
-import com.example.MediLink.repository.AccountRepository;
+import com.example.MediLink.repository.PatientAccountRepository;
 
 @Service
-public class AccountStorageService {
+public class PatientAccountService {
 
     @Autowired
-    private AccountRepository accountRepository;
+    private PatientAccountRepository accountRepository;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;

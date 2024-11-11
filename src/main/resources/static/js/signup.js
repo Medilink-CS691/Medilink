@@ -5,21 +5,26 @@ document.addEventListener('DOMContentLoaded', () => {
     // Regex patterns for validation
     const nameRegex = /^[A-Za-z]+$/;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/; // Updated regex to match (XXX) XXX-XXXX format
+    const phoneRegex = /^\d{10}$/; // Regex to validate unformatted 10-digit phone number
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     const zipRegex = /^\d{5}$/;
 
     // Show the initial step
     steps[currentStep].classList.add('active');
 
-    // Phone number masking
+    // Phone number input setup
     const phoneNumberInput = document.getElementById('phone-number');
+    phoneNumberInput.dataset.rawValue = ""; // Initialize raw value storage
+
+    // Handle phone number formatting on input
     phoneNumberInput.addEventListener('input', (event) => {
         const input = event.target.value.replace(/\D/g, ''); // Remove all non-numeric characters
-        const formattedPhoneNumber = formatPhoneNumber(input);
-        event.target.value = formattedPhoneNumber;
+        phoneNumberInput.dataset.rawValue = input; // Store the raw value
+        event.target.value = formatPhoneNumber(input); // Format the phone number
     });
 
+    // Format the phone number
+    /*
     function formatPhoneNumber(input) {
         if (input.length > 10) {
             input = input.slice(0, 10); // Limit input to 10 digits
@@ -36,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return `(${areaCode}`;
         }
         return input;
-    }
+    }*/
 
     // Function to show error messages
     function showError(inputId, message) {
@@ -54,16 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function validateStep1() {
         let isValid = true;
 
-        // Validate Preferred Name
-        /*
-        const preferredName = document.getElementById('preferred-name').value.trim();
-        if (!nameRegex.test(preferredName)) {
-            showError('preferred-name', 'Preferred Name should only contain alphabets.');
-            isValid = false;
-        } else {
-            clearError('preferred-name');
-        }*/
-
         // Validate Email
         const email = document.getElementById('email').value.trim();
         if (!emailRegex.test(email)) {
@@ -73,10 +68,10 @@ document.addEventListener('DOMContentLoaded', () => {
             clearError('email');
         }
 
-        // Validate Phone Number (with the new format)
-        const phoneNumber = document.getElementById('phone-number').value.trim();
+        // Validate Phone Number (unformatted)
+        const phoneNumber = phoneNumberInput.dataset.rawValue; // Get unformatted number
         if (!phoneRegex.test(phoneNumber)) {
-            showError('phone-number', 'Phone number must be in the format (XXX) XXX-XXXX.');
+            showError('phone-number', 'Phone number must be 10 digits.');
             isValid = false;
         } else {
             clearError('phone-number');

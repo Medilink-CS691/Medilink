@@ -70,11 +70,11 @@ public class PatientAccount {
         this.id = id;
     }
 
-    public String getUserName() {
+    public String getUsername() { // Renamed from getUserName to getUsername
         return username;
     }
-
-    public void setUserName(String username) {
+    
+    public void setUsername(String username) { // Renamed from setUserName to setUsername
         this.username = username;
     }
 
