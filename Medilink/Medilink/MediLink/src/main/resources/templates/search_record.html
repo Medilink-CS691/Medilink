@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Search and View Patient Records - MediLink</title>
+    <link rel="stylesheet" href="/css/records.css">
+    <style>
+        /* Additional styling */
+        .header {
+            position: relative;
+            padding: 10px;
+            background-color: #333;
+            color: white;
+            text-align: center;
+        }
+        .header a.return-button {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        .button {
+            background-color: #4CAF50; /* Default button color */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .button.download-button { background-color: blue; }
+        .button.delete-button { background-color: red; }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="header">
+        <a th:href="@{/returnDoctor.html(license=${license})}" class="return-button">
+            &#8592; Return
+        </a>
+        <h2 style="margin: 0;">Welcome, Doctor: <span th:text="${name}"></span></h2>
+    </div>
+
+    <!-- Main Container for Search and Record Selection -->
+    <div class="main-container">
+        <!-- Search Function Container -->
+        <form method="get" th:action="@{/search-by-email}" id="searchForm">
+            <div class="search-container">
+                <label for="searchCriteria">Search Patient By:</label>
+                <select id="searchCriteria" name="searchType" onchange="updateSearchAction(this.value)">
+                    <option value="email">Email</option>
+                    <option value="phone">Phone Number</option>
+                    <option value="username">Username</option>
+                </select>
+
+                <input type="text" id="searchInput" name="email" placeholder="Enter Value" required />
+                <input type="hidden" name="license" th:value="${license}" />
+                <input type="hidden" name="name" th:value="${name}" />
+                <button type="submit" class="button">Search</button>
+
+                <!-- Display Patient Name or Error Message -->
+                <span th:if="${patientAccount != null}" style="margin-left: 10px; font-weight: bold;">
+                    Patient Name: 
+                    <span th:text="${patientAccount.firstName}">First Name</span>
+                    <span th:text="${patientAccount.middleName}">Middle Name</span>
+                    <span th:text="${patientAccount.lastName}">Last Name</span>
+                </span>
+                <span th:if="${message != null}" style="color: red; margin-left: 10px; font-weight: bold;" th:text="${message}"></span>
+            </div>
+        </form>
+
+        <!-- Record Selection and Upload Container -->
+        <div class="record-selection-container" th:if="${files != null}">
+            <label for="pdfDropdown">Select Medical Record:</label>
+            <select id="pdfDropdown" onchange="viewPdf(this.value)">
+                <option value="">-- Select a file --</option>
+                <th:block th:each="file : ${files}">
+                    <option th:value="@{/files/{id}(id=${file.id})}" th:text="${file.fileName}"
+                        th:data-download-url="@{/download/{id}(id=${file.id})}"
+                        th:data-delete-url="@{/doctordelete/{id}(id=${file.id})}"></option>
+                </th:block>
+            </select>
+            <button id="downloadBtn" class="button download-button" style="display: none;" onclick="downloadPdf()">Download</button>
+            <button id="deleteBtn" class="button delete-button" style="display: none;" onclick="deletePdf()">Delete</button>
+
+            <!-- Hidden Delete Form -->
+            <form id="deleteForm" method="POST" style="display: none;">
+                <input type="hidden" name="license" th:value="${license}">
+                <input type="hidden" name="name" th:value="${name}">
+                <input type="hidden" name="patientUsername" th:value="${patientAccount.username}">
+            </form>
+
+            <!-- Upload Section -->
+            <form method="POST" enctype="multipart/form-data" th:action="@{/recordsdoctorupload}" style="margin-top: 20px;">
+                <input type="hidden" name="patientUsername" th:value="${patientAccount.username}" />
+                <input type="hidden" name="license" th:value="${license}" />
+                <input type="hidden" name="name" th:value="${name}" />
+                <label for="fileUpload">Upload Medical Record (PDF):</label>
+                <input type="file" id="fileUpload" name="file" accept="application/pdf" required />
+                <button type="submit" class="button">Upload</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- PDF Viewer Section -->
+    <div class="pdf-viewer">
+        <iframe id="pdfViewer" width="100%" height="90vh" style="border: none;"></iframe>
+    </div>
+
+    <script>
+        function updateSearchAction(value) {
+            const searchForm = document.getElementById('searchForm');
+            const searchInput = document.getElementById('searchInput');
+
+            // Reset input value on criteria change (optional)
+            searchInput.value = '';
+
+            // Set form action and input name based on the selected criteria
+            if (value === 'email') {
+                searchForm.action = '/search-by-email';
+                searchInput.name = 'email';
+            } else if (value === 'phone') {
+                searchForm.action = '/search-by-phone';
+                searchInput.name = 'phone';
+            } else if (value === 'username') {
+                searchForm.action = '/search-by-username';
+                searchInput.name = 'username';
+            }
+        }
+
+        function viewPdf(pdfUrl) {
+            const dropdown = document.getElementById('pdfDropdown');
+            const selectedOption = dropdown.options[dropdown.selectedIndex];
+
+            if (pdfUrl) {
+                document.getElementById('pdfViewer').src = pdfUrl;
+                document.getElementById('downloadBtn').style.display = 'inline';
+                const downloadUrl = selectedOption.getAttribute('data-download-url');
+                document.getElementById('downloadBtn').setAttribute('data-url', downloadUrl);
+                document.getElementById('deleteBtn').style.display = 'inline';
+                const deleteUrl = selectedOption.getAttribute('data-delete-url');
+                document.getElementById('deleteForm').action = deleteUrl;
+            } else {
+                document.getElementById('pdfViewer').src = '';
+                document.getElementById('downloadBtn').style.display = 'none';
+                document.getElementById('deleteBtn').style.display = 'none';
+            }
+        }
+
+        function downloadPdf() {
+            const pdfUrl = document.getElementById('downloadBtn').getAttribute('data-url');
+            if (pdfUrl) {
+                window.location.href = pdfUrl;
+            }
+        }
+
+        function deletePdf() {
+            const deleteForm = document.getElementById('deleteForm');
+            if (confirm("Are you sure you want to delete this PDF?")) {
+                deleteForm.submit();
+            }
+        }
+    </script>
+
+</body>
+</html>
